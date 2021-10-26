@@ -1,184 +1,275 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-import 'react-native-gesture-handler';
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  Button,
-  Alert,
-  BackHandler,
-} from 'react-native';
+import * as React from 'react';
+import {View, Button, Text, Image, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {createStackNavigator} from '@react-navigation/stack';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
-import HomePage from './src/components/HomePage';
-import CountryScreen from './src/components/CountryPage';
-import LanguageScreen from './src/components/CountryLanguagePage';
-
-const Stack = createStackNavigator();
-
-const StackNavigator = () => {
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {ScrollView} from 'react-native-gesture-handler';
+function CustomHeader({title, isHome, navigation}) {
   return (
-    <Stack.Navigator initialRouteName="HomePage">
-      <Stack.Screen name="HomePage" component={LanguageScreen} />
-      <Stack.Screen name="Country" component={CountryScreen} />
-      <Stack.Screen name="Language" component={LanguageScreen} />
-    </Stack.Navigator>
+    <View style={{flexDirection: 'row', height: 50}}>
+      {isHome ? (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <Image
+              style={{width: 30, height: 30, marginLeft: 5}}
+              source={require('./src/images/menu.png')}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image
+              style={{width: 20, height: 20, marginLeft: 5}}
+              source={require('./src/images/back.png')}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <View style={{flex: 1.5, justifyContent: 'center'}}>
+        <Text style={{textAlign: 'center'}}>{title}</Text>
+      </View>
+      <View style={{flex: 1, justifyContent: 'center'}}></View>
+    </View>
   );
-};
-function CustomDrawerContent(props) {
-  const handleBackPress = () => {
-    Alert.alert(
-      'Exit App',
-      'Do you want to exit?',
-      [
-        {
-          text: 'No',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: 'Yes', onPress: () => BackHandler.exitApp()},
-      ],
-      {cancelable: false},
-    );
-    return true;
-  };
+}
+function HomeScreen({navigation}) {
   return (
-    <DrawerContentScrollView {...props}>
-      {/* DrawerItemList will show all the screens from the navigator */}
-
-      <DrawerItem label="Exit" onPress={() => handleBackPress()} />
-    </DrawerContentScrollView>
+    <SafeAreaView style={{flex: 1}}>
+      <CustomHeader title="Home" isHome={true} navigation={navigation} />
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Home!</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('HomeDetail')}>
+          <Text>Go Home Detail</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+}
+function HomeScreenDetail({navigation}) {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <CustomHeader title="Home Screen Detail" navigation={navigation} />
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>HomeScreenDetails!</Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
-const Drawer = createDrawerNavigator();
-
-const MyDrawer = () => {
+function SettingsScreen({navigation}) {
   return (
-    <Drawer.Navigator
-      initialRouteName="HomePage"
-      drawerStyle={{
-        backgroundColor: '#c6cbef',
-        width: 240,
-        fontSize: 20,
-      }}
-      drawerContent={(props) => {
-        const filteredProps = {
-          ...props,
-          state: {
-            ...props.state,
-            routeNames: props.state.routeNames.filter(
-              // To hide single option
-              // (routeName) => routeName !== 'HiddenPage1',
-              // To hide multiple options you can add & condition
-              (routeName) => {
-                routeName !== 'SplashScreen' &&
-                  routeName !== 'Country' &&
-                  routeName !== 'Language' &&
-                  routeName !== 'Root';
-              },
-            ),
-            routes: props.state.routes.filter(
-              (route) =>
-                route.name !== 'SplashScreen' &&
-                route.name !== 'Country' &&
-                route.name !== 'Language' &&
-                route.name !== 'Root',
-            ),
-          },
-        };
-        return (
-          <DrawerContentScrollView {...filteredProps}>
-            <DrawerItemList {...filteredProps} />
-            <CustomDrawerContent {...props} style={{fontSize: 20}} />
-          </DrawerContentScrollView>
-        );
-      }}>
-      <Drawer.Screen
-        name="HomePage"
-        component={HomePage}
-        options={{headerShown: false}}
-      />
-      <Drawer.Screen
-        name="Country"
-        component={CountryScreen}
-        options={{headerShown: false}}
-      />
-      <Drawer.Screen
-        name="Language"
-        component={LanguageScreen}
-        options={{headerShown: false}}
-      />
-      <Drawer.Screen
-        name="Root"
-        component={StackNavigator}
-        options={{headerShown: false}}
-      />
-    </Drawer.Navigator>
+    <SafeAreaView style={{flex: 1}}>
+      <CustomHeader title="Settings" isHome={true} navigation={navigation} />
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Settings!</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('SettingsDetails')}>
+          <Text>Go Settings</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
-};
+}
+function SettingsScreenDetail({navigation}) {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <CustomHeader title="Settings Screen Detail" navigation={navigation} />
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Settings Screen Detail!</Text>
+      </View>
+    </SafeAreaView>
+  );
+}
 
+const Tab = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
+const navOptionsHeader = () => ({
+  headerShown: false,
+  // showIcon: true,
+  // showLabel: true
+});
+function HomeStackFunc() {
+  return (
+    <HomeStack.Navigator initialRouteName="Home">
+      <HomeStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={navOptionsHeader}
+      />
+      <HomeStack.Screen
+        name="HomeDetail"
+        component={HomeScreenDetail}
+        options={navOptionsHeader}
+      />
+    </HomeStack.Navigator>
+  );
+}
+
+function SettingsStackNav() {
+  return (
+    <SettingsStack.Navigator initialRouteName="Settings">
+      <SettingsStack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={navOptionsHeader}
+      />
+      <SettingsStack.Screen
+        name="SettingsDetails"
+        component={SettingsScreenDetail}
+        options={navOptionsHeader}
+      />
+    </SettingsStack.Navigator>
+  );
+}
+
+function Tabnavigation() {
+  return (
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size, tintColor}) => {
+          let iconName;
+
+          if (route.name === 'Homes') {
+            iconName = focused
+              ? require('./src/images/homeBlack.png')
+              : require('./src/images/home.png');
+          } else if (route.name === 'Setting') {
+            iconName = focused
+              ? require('./src/images/settingsBlack.png')
+              : require('./src/images/settings.png');
+          }
+
+          // You can return any component that you like here!
+          return (
+            <Image
+              source={iconName}
+              style={{width: 25, height: 25, tintColor: tintColor}}
+              resizeMode="contain"
+            />
+          );
+        },
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+      })}>
+      <Tab.Screen
+        name="Homes"
+        component={HomeStackFunc}
+        options={navOptionsHeader}
+      />
+      <Tab.Screen
+        name="Setting"
+        component={SettingsStackNav}
+        options={navOptionsHeader}
+      />
+    </Tab.Navigator>
+  );
+}
+function NotificationsScreen({navigation}) {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <CustomHeader title="Notifications" navigation={navigation} />
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>Notifications Screen Detail!</Text>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+function RegiterScreen({navigation}) {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <CustomHeader title="Regiter" navigation={navigation} />
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>Regiter Screen </Text>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+function LoginScreen({navigation}) {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity
+        style={{marginTop:20}}
+          onPress={() => navigation.navigate('HomeApp')}>
+          <Text>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{marginTop:20}}
+          onPress={() => navigation.navigate('Register')}>
+          <Text>Register</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+}
+function CustomDrawerContent(props) {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View
+        style={{height: 180, alignItems: 'center', justifyContent: 'center'}}>
+        <Image
+          source={require('./src/images/user.png')}
+          style={{height: 120, width: 120, borderRadius: 60}}
+        />
+      </View>
+      <ScrollView style={{marginLeft: 5}}>
+        <TouchableOpacity
+          style={{marginTop: 20}}
+          onPress={() => props.navigation.navigate('HomeTab')}>
+          <Text>Menu Tab</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{marginTop: 20}}
+          onPress={() => props.navigation.navigate('Notifications')}>
+          <Text>Notifications</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+const Drawer = createDrawerNavigator();
+function DrawerNavigation(){
+return(
+  <Drawer.Navigator
+  initialRouteName="HomeTab"
+  drawerContent={(props) => CustomDrawerContent(props)}>
+  <Drawer.Screen name="HomeTab" component={Tabnavigation} />
+  <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+</Drawer.Navigator>
+)
+}
+const StackApp = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <MyDrawer />
+     <StackApp.Navigator initialRouteName="Login">
+      <StackApp.Screen
+        name="HomeApp"
+        component={DrawerNavigation}
+        options={navOptionsHeader}
+      />
+      <StackApp.Screen
+        name="Login"
+        component={LoginScreen}
+        options={navOptionsHeader}
+      />
+      <StackApp.Screen
+        name="Register"
+        component={RegiterScreen}
+        options={navOptionsHeader}
+      />
+    </StackApp.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});

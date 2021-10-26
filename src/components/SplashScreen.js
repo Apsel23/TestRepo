@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 20,
     fontStyle: 'normal',
-    fontFamily: 'Nunito-Bold',
+    // fontFamily: 'Nunito-Bold',
   },
   dataShow: {
     flex: 1,
