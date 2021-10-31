@@ -6,6 +6,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {ScrollView} from 'react-native-gesture-handler';
+import LoginScreen from './src/components/LoginScreen'
 function CustomHeader({title, isHome, navigation}) {
   return (
     <View style={{flexDirection: 'row', height: 50}}>
@@ -195,24 +196,24 @@ function RegiterScreen({navigation}) {
     </SafeAreaView>
   );
 }
-function LoginScreen({navigation}) {
-  return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableOpacity
-        style={{marginTop:20}}
-          onPress={() => navigation.navigate('HomeApp')}>
-          <Text>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{marginTop:20}}
-          onPress={() => navigation.navigate('Register')}>
-          <Text>Register</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-}
+// function LoginScreen({navigation}) {
+//   return (
+//     <SafeAreaView style={{flex: 1}}>
+//       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+//         <TouchableOpacity
+//         style={{marginTop:20}}
+//           onPress={() => navigation.navigate('HomeApp')}>
+//           <Text>Login</Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={{marginTop:20}}
+//           onPress={() => navigation.navigate('Register')}>
+//           <Text>Register</Text>
+//         </TouchableOpacity>
+//       </View>
+//     </SafeAreaView>
+//   );
+// }
 function CustomDrawerContent(props) {
   return (
     <SafeAreaView style={{flex: 1}}>
